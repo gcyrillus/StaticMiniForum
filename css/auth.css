@@ -1,0 +1,15 @@
+html#new {display:grid;min-height:100vh;place-content:safe center;text-align:center;}
+#new .ico{position:absolute;font-size:14pt;font-style: normal;padding-left:4px;z-index:5;padding-top: .2rem;}
+#new .icon-name-si::before{content:'😇';}
+#new .icon-user-si::before{content:'😸';}
+#new .icon-lock-si::before{content:'🔒';}
+#new .icon-mail-si::before{content:'📧';}
+#new #id_email{position:absolute;display:none;z-index:-10;top:-1000rem;}
+#new .ico + input{padding-left: 2rem;}
+#new .ico ~ input[type="email"],
+#new .ico ~ input[type="password"],
+#new .ico ~ input[type="text"]{}
+#new .new {border-radius: 5px;}
+#new .signup {display: grid;gap:.5em;min-width: 300px;}
+#new input {width: 80%;height: 2em;border-radius: 5px;border-width: 1px;}
+#new .new {border-radius: 5px;padding-top:5em;background:url(../../../plugins/StaticMiniForum/icon.jpg) top center / 10em no-repeat}

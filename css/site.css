@@ -1,0 +1,344 @@
+/**
+	* Plugin 			StaticComments
+	*
+	* @CMS required			PluXml 
+	*
+	* @version			2.7.0
+	* @date				10/12/2024
+	* @author 			G.Cyrille
+	░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+	░       ░░  ░░░░░░░  ░░░░  ░  ░░░░  ░░      ░░       ░░░      ░░  ░░░░░░░        ░░      ░░░░░   ░░░  ░        ░        ░
+	▒  ▒▒▒▒  ▒  ▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒  ▒▒  ▒▒  ▒▒▒▒  ▒  ▒▒▒▒  ▒  ▒▒▒▒  ▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒    ▒▒  ▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒
+	▓       ▓▓  ▓▓▓▓▓▓▓  ▓▓▓▓  ▓▓▓    ▓▓▓  ▓▓▓▓  ▓       ▓▓  ▓▓▓▓  ▓  ▓▓▓▓▓▓▓▓▓▓  ▓▓▓▓▓      ▓▓▓▓▓  ▓  ▓  ▓      ▓▓▓▓▓▓  ▓▓▓▓
+	█  ███████  ███████  ████  ██  ██  ██  ████  █  ███████  ████  █  ██████████  ██████████  ████  ██    █  ██████████  ████
+	█  ███████        ██      ██  ████  ██      ██  ████████      ██        █        ██      ██  █  ███   █        ████  ████
+	█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████
+**/
+
+/* style moderation */
+#staticMiniForum #modoComs [type="submit"] {
+    margin: 1em auto;
+    display: none;
+}
+#staticMiniForum #modoComs:has(input:checked) [type="submit"] {
+    display: block;
+}
+#staticMiniForum #modoComs label {
+    cursor: pointer;
+}
+#staticMiniForum .modo {
+    float: right;
+    display: flex;
+    margin-inline-end: 0.75em;
+    font-size: 0.75em;
+    line-height: 1.6;
+    border: solid 1px black;
+    border-radius: 5px;
+    padding: 0 0.5em;
+    background-color: coral;
+    color: white;
+    text-decoration: none;
+    box-shadow: 1px 1px 2px black;
+    position: relative;
+}
+#staticMiniForum .modo input[type="checkbox"] {
+    position: absolute;
+    right: 110%;
+    top: 0.3em;
+    opacity: 0;
+}
+#staticMiniForum .modo input[type="checkbox"]:checked {
+    opacity: 1;
+}
+#staticMiniForum .modo:has(input:checked) {
+    background: red;
+}
+#staticMiniForum .modo:hover {
+    box-shadow: -1px -1px 2px black;
+    text-shadow: -1px -1px 1px gray;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+#staticMiniForum {
+    border: solid 1px gray;
+    padding: 1em;
+    background: url(../../../plugins/StaticMiniForum/icon.jpg) 0 0 / 11em no-repeat,
+    linear-gradient(to bottom, white 7.2em, black 7.25em, transparent 7.2em),
+    #55555505;
+}
+#staticMiniForum  #version {
+    margin: 0;
+    text-align: center;
+    font-weight: bold;
+}
+#staticMiniForum #version a {
+    color: #ff8021;
+    text-shadow: 1px 1px #0005;
+    font-size: 12pt;
+}
+#staticMiniForum .vicon {
+    height: 4em;
+    vertical-align: middle;
+    display: none;
+}
+#staticMiniForum :where(.page-item.page-link.active) {
+    text-decoration: underline;
+    font-weight: bold;
+    padding: 0.3em 2em;
+}
+#staticMiniForum .pagination.text-center.center.bordered {
+    border-radius: 5px;
+    width: max-content;
+    margin: auto;
+    padding: .5em .5em;
+    border: solid 1px #333;
+    display: flex;
+    align-items: center;
+    gap: .25em;
+    list-style: none;
+}
+#staticMiniForum .pagination.text-center.center.bordered a.page-link{
+    background-color: #258fd6;
+    border-radius: .3rem;
+    color: #fff;
+    padding: .9rem .7rem;
+    transition-duration: .2s;
+}
+#staticMiniForum .pagination.text-center.center.bordered a.page-link:hover{
+    background-color:  #3a6c96;
+}
+#staticMiniForum :target {
+    scroll-margin-top: 10em;
+    filter:drop-shadow(0 0 5px);
+}
+#staticMiniForum #forum_message:has(strong:empty) {
+    display: none;
+}
+#staticMiniForum .content_com {
+    white-space: pre-wrap;
+}
+#forum_nav {
+    display: flex;
+    place-content: center;
+    gap: 0.5em;
+    padding-block: 0.5em;
+    font-size: 0.75em;
+}
+#staticMiniForum #forum_nav a {
+    padding: 0.05em 1em;
+    border: solid 1px gray;
+    border-radius: 7px;
+    background: #059bff;
+    color: white;
+}
+#staticMiniForum #forum_nav a.reddish {
+    background: #ff4069;
+}
+#forum_nav + .main_subject {
+    box-shadow: 0 0 0 3px #555;
+}
+#staticMiniForum #modoComs .thread .modo {
+    margin-top: -1.2em;
+}
+#staticMiniForum #modoComs .thread label.modo {
+    margin-top: -1.2em;
+    margin-bottom: -1em;
+}
+#staticMiniForum .thread {
+    box-shadow: 0 0 0 1px;
+}
+#staticMiniForum .main_subject,
+#staticMiniForum .thread:has(label.modo) {
+    box-shadow: 0 0 0 1px;
+    margin-top: 1.2em;
+}
+#staticMiniForum .main_subject h3 {
+    margin: 0;
+    font-size: 1.4em;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-template-rows: repeat(2, auto);
+    gap: 0 1em;
+    padding: 0.25em 0.5em;
+    background: ivory;
+    border-bottom: solid 1px;
+}
+#staticMiniForum .main_subject h3 :is(time, span) {
+    font-size: 1rem;
+    margin: auto 1em auto auto;
+}
+#staticMiniForum .main_subject h3 b {
+    text-transform: uppercase;
+    font-size: 0.85em;
+}
+#staticMiniForum .main_subject h3 big {
+    grid-column: 1;
+    grid-row: 1;
+}
+#staticMiniForum .main_subject h3 small {
+    grid-column: 2/4;
+}
+#staticMiniForum h3.miniForum {
+    font-size: 1.4em;
+    text-align: center;
+    text-decoration: underline dotted #ff4069 1px;
+    margin-top: 3em;
+}
+#staticMiniForum .main_subject > div {
+    padding: 1em;
+}
+#staticMiniForum .named {
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1em 1fr;
+    grid-template-columns:1fr auto;
+    gap: 1em;
+    padding-inline: 1em;
+    background: #f0f0f044;
+    border-bottom: dotted 1px #ccc;
+}
+#staticMiniForum .main_subject h3 b,
+#staticMiniForum .named b {
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px black;
+    filter: drop-shadow(1px 1px 3px gray);
+    grid-row: 1 / span 2;
+    min-width: 60px;
+    padding:0;
+}
+#staticMiniForum b.badge_miniForum {
+    margin:.2em 0;
+    background:var(--bgColor,#559);
+    aspect-ratio:1;
+    max-width: max-content;
+    padding: 0;
+    font-size:var(--ftSize);
+    display:grid;
+    place-content:center;
+    border-radius:50%;
+    color:white;
+}
+#staticMiniForum h3 small,
+#staticMiniForum .named small {
+    border: solid silver 1px;
+    grid-row: 2;
+    margin-bottom: auto;
+    background: #ddd;
+    width: max-content;
+    padding: 0 0.5em;
+    line-height: 1.6;
+    border-radius: 5px;
+    color: #777;
+}
+#staticMiniForum .named time {
+    font-size: 0.75em;
+    height: 0.75em;
+}
+#staticMiniForum nav:not([class]) {
+    margin-top: 1.2em;
+}
+.main #form .col.sml-12 #staticMiniForum ,
+.container .row .col.sml-12 #staticMiniForum ,
+page-content .col.sml-12 #staticMiniForum {
+    display: grid;
+    margin-bottom: 1em;
+} /* to help with bootstrap library*/
+
+
+#staticMiniForum .lastThreads {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    justify-content: center;
+    gap: 0 3em;
+    background: #00000005;
+    margin-top: 1em;
+}
+#staticMiniForum .lastThreads h3 {
+    grid-column: 1/-1;
+    margin:1rem auto;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #5E6233;
+}
+#staticMiniForum .lastThreads h4 {
+    margin:1rem 0 0;
+    grid-row:2;
+}
+#staticMiniForum .lastThreads ul {
+    grid-row:3;
+}
+
+.other-forum-list.unstyled-list li {
+    background: url(../../../plugins/StaticMiniForum/icon.jpg) 0 50% / 1.6em no-repeat;
+    padding-left: 1.65em;
+    mix-blend-mode: darken;
+}
+.unstyled-list li b {
+    color: #5E6233;
+}
+.lastThreads li.active{
+    font-weight: bolder;
+    color:#0E78B2;
+}
+.nbMembers {
+    display:inline-block;
+    font-size:.5em;
+    padding-left:1rem;
+    color:#5E6233;
+    text-transform: initial;
+    font-weight: initial;
+}
+p.modos {
+    display:none;
+}
+#staticMiniForum .modos {
+    display:block;
+    grid-column:1/-1;
+    font-size: .75em;
+    background: white;
+    text-align: center;
+    border: solid 1px lightgray;
+}
+#staticMiniForum .modos span {
+    color:#258fd6;
+    break-inside:avoid;
+}
+#staticMiniForum .modos span + span::before {
+    content:'| ';
+    color:#5E6233;
+}
+#staticMiniForum .modos span:last-of-type::after {
+    content:'.';
+    color:#5E6233;
+}
+.content_thread {
+  padding-bottom: 1em;
+}
+
+
+/* recherche */
+#headForum, #headForum form {
+  display:grid;
+  grid-template-columns:1fr auto;
+  align-items: center
+}
+#results {
+  background:ivory;
+    border:1px solid #0004;
+    border-radius: 5px;
+  margin: 1em;
+  padding:1em;
+}
+#results h2 {
+  text-align: center;
+  margin: 0;
+}
+#results h2 b {
+  color:hotpink;
+}
+#results h3 {
+    font-weight: bold;
+    text-decoration: underline
+}
